@@ -1,0 +1,6 @@
+search_hits: these json files are the search hits generated from various searches of the NASA imagery catalog.  They were combined into the combined-USE file, which is actually the basis of the simulated live data feed.  There are 430 entries.
+
+downloaded_images: the DOWNLOAD_SERVICE will loop through those search hits, extract the image URL, and download the image from NASA.  This, however, requires an Internet connection.  To support demos in disconnected environments, these images have been downloaded and kept. To use these instead of retrieving them from NASA, set "use-internet" to false in config.properties.
+
+mirror_data_files: This small subset of image files are used to demonstrate mirroring.  These specific files, which are nice mapr-related images, are mirrored to the edge when the mirror volume is created on the Edge cluster.
+

@@ -1,0 +1,11 @@
+This directory contains everything necessary to run the Microservices Pipeline demo.
+It comes in two variants: an HQ version and an EDGE version.
+The HQ version is standalone. Use this by itself to demonstrate microservice architectures.
+The Edge version can only work in conjunction with the HQ version, using two clusters to demonstrate data replication.
+
+Run install-demo-<variant>.sh to install the demo.
+
+Then, run the app using run-<variant>Dashboard.sh.
+Follow the instructions to establish a connection from a web browser.
+
+With the demo already installed, modifications to the demo app (i.e. HTML, javascript, and/or back-end Java code) can be deployed using the webonly.sh script.  

@@ -1,0 +1,1 @@
+maprcli node services -name apiserver -action restart -filter '[csvc==apiserver]'
