@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>MapR Data Pipelines</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" href="./css/slider.css">
+  
+  <script src="./js/mapr-microservices-dashboard.js"></script>
+
+  <!-- The order of these is important, dictated by dependencies -->
+  <script src="./js/jquery.min.js"></script>
+  <script src="./js/bootstrap.min.js"></script>
+  <script src="./js/sockjs.min.js"></script>
+  <script src="./js/vertxbus.js"></script>
+  <script src="./js/bootstrap-slider.js"></script>
+  
+<!-- for slider -->
+<link rel="stylesheet" href="./css/jquery.mobile-1.4.5.min.css">
+<script src="./js/jquery-1.11.3.min.js"></script>
+<script src="./js/jquery.mobile-1.4.5.min.js"></script>
+
+  <style>
+  .black-bg-page {
+      background-color: #000000;
+      color: #ffffff;
+      padding-top: 0px;
+  }
+  .white-bg-page {
+      background-color: #ffffff;
+      color: #000000;
+      margin-left: 20px;
+  }
+  .container-fluid {
+      padding-top: 20px;
+      padding-bottom: 20px;
+  }
+  /* This gets rid of an annoying space added to the bottom of a Bootstrap panel. */
+  .grid-panel {
+      margin: 0 !important;
+  }
+  .custom-fixed-panel {
+      min-height: 200px;
+      max-height: 200px;
+      overflow-y: scroll;
+  }
+  .grid-row {
+  	  height: 260px;
+  }
+  .panel-data-row {
+      border-bottom: solid transparent 2px;
+  }
+  .panel-image-row {
+      border-bottom: solid transparent 13px;
+  }
+  </style>
+
+</head>
+
+<body class="white-bg-page" onload="dashboardInitHQ()";>
+
+<div class="container-fluid">
+
+  <img src="./images/mapr-red-letter-logo.png" style="vertical-align:text-bottom;padding-bottom:3px;padding-right:6px;">
+  <font style="font-size:30px;font-weight:500;padding-top:0px;padding-bottom:0px;">Data Processing Pipeline</font>
+  <img id="deployment-env" src="" style="position:absolute;right:50px;vertical-align:text-bottom;height:75px;">
+  <font style="display:block;font-size:20px;font-weight:200;padding-top:0px;padding-bottom:0px;">
+    A Microservice Architecture leads to greater agility and more rapid innovation
+  </font>
+
+  <div class="row" style="padding-top:20px;">
+  
+      <div class="col-sm-3">
+      
+         <!-- DATA FEEDS -->
+        <div class="panel panel-primary">
+          <div class="panel-heading" style="text-shadow:none;">Data Feeds and Services</div>
+          <div class="panel-body">
+            <!-- See here for example of dynamically adding a row with Bootstrap: https://bootsnipp.com/snippets/402bQ
+                 Note that "feedsTable is a class name, not the ID name.
+                 Zero-height rows are added because tables needs them for dynamic additions to work. -->
+          	<table class="table table-striped feedsTable" style="margin:0;"><tr height="0"></tr><tr height="0"></tr></table>
+          </div>  <!-- class="panel-body" -->
+        </div>    <!-- class="panel"      -->
+        <!-- END DATA FEEDS -->
+        
+        
+        <!-- SYSTEM METRICS -->
+        <div class="panel panel-primary">
+          <div class="panel-heading" style="text-shadow:none;">System Metrics</div>
+          <div class="panel-body">
+        
+            <!-- metrics go here -->
+            <ul class="list-group" style="margin:0;">
+              <li class="list-group-item">
+                <span id="imagesProcessed" class="badge">0</span>
+                <font style="font-size:14px;font-weight:500;">Images Processed</font>
+              </li>
+              <li class="list-group-item">
+                <span id="messagesProcessed" class="badge">0</span>
+                <font style="font-size:14px;font-weight:500;">Messages Processed</font>
+              </li>
+              <li class="list-group-item">
+                <span id="assetsRequested" class="badge">0</span>
+                <font style="font-size:14px;font-weight:500;">Assets Requested</font>
+              </li>
+            </ul>
+        
+          </div>  <!-- class="panel-body" -->
+        </div>    <!-- class="panel"      -->
+        <!-- END SYSTEM METRICS -->
+
+
+        <!-- CONTROL PANEL -->
+        <div class="panel panel-primary">
+          <div class="panel-heading" style="text-shadow:none;">Control Panel</div>
+          <div class="panel-body">
+        
+            <!-- selectors go here -->
+            
+            <div class="well">
+              <button id="buttonDeployV1" type="button" data-state="1" data-state1-text="Deploy New Service" data-state2-text="Decommission Service" class="btn btn-default" onclick="deployV1Service(this);">Deploy New Service</button>
+              <font style="display:block;font-size:16px;font-weight:500;padding-top:10px;padding-bottom:6px;">Service: Image Classifier V.1</font>
+              <font style="display:block;font-size:14px;font-weight:300;padding-bottom:3px;">Input Stream: Image Downloaded</font>
+              <font style="display:block;font-size:14px;font-weight:300;padding-top:1px;padding-bottom:6px;">Output Stream: Image Categorized</font>
+            </div> 
+            
+            <div class="well">
+              <button id="buttonDeployV2" type="button" data-state="1" data-state1-text="Upgrade System" data-state2-text="Decommission Service" class="btn btn-default" onclick="deployV2Service(this);">Upgrade System</button>
+              <font style="display:block;font-size:16px;font-weight:500;padding-top:10px;padding-bottom:6px;">Service: Image Classifier V.2</font>
+              <font style="display:block;font-size:14px;font-weight:300;padding-bottom:3px;">Input Stream: Image Downloaded</font>
+              <font style="display:block;font-size:14px;font-weight:300;padding-top:1px;padding-bottom:6px;">Output Stream: Image Categorized</font>
+            </div>
+
+      		<label for="delayProcessing">Processing Delay (ms):</label>
+      		<input type="range" name="delayProcessing" id="delayProcessing" value="5000" min="0" max="5000" data-show-value="false" data-highlight="true" onChange="changeSpeed('delayProcessing', value);">
+      		<label for="delayDataFeed">Data Feed Delay (s):</label>
+      		<input type="range" name="delayDataFeed" id="delayDataFeed" value="5" min="0" max="30" data-show-value="false" data-highlight="true" onChange="changeSpeed('delayDataFeed', value*1000);">
+      		<label for="delayCompletionText">Keep Text Tiles After Completion (s):</label>
+      		<input type="range" name="delayCompletionText" id="delayCompletionText" value="10" min="0" max="60" data-show-value="false" data-highlight="true" onChange="changeSpeed('delayCompletionText', value*1000);">
+      		<label for="delayCompletionImages">Keep Image Tiles After Completion (s):</label>
+      		<input type="range" name="delayCompletionImages" id="delayCompletionImages" value="20" min="0" max="60" data-show-value="false" data-highlight="true" onChange="changeSpeed('delayCompletionImages', value*1000);">
+          
+            <div class="well">
+				<center><font style="display:block;font-size:16px;font-weight:500;padding-top:10px;padding-bottom:6px;">Deployment Env Banner</font></center>
+				<button type="button" class="btn btn-primary" onClick="setBanner('none');">None</button>
+				<button type="button" class="btn btn-secondary" onClick="setBanner('aws');">AWS</button>
+				<button type="button" class="btn btn-success" onClick="setBanner('azure');">Azure</button>
+			</div>
+
+            <button type="button" class="btn btn-default" style="margin-top:20px;" onclick="debugButtonClick()">Debug</button>
+            
+          </div>  <!-- class="panel-body" -->
+        </div>    <!-- class="panel"      -->
+        <!-- END CONTROL PANEL -->
+
+      </div>      <!-- control panels   -->
+
+      <!-- DISPLAY GRID.  Table is generated programmatically on page load. -->
+      <div class="col-sm-9">
+        <table id="grid" class="table table-bordered" style="table-layout:fixed;"></table>
+      </div>
+        
+  </div> 
+    
+</div>   <!-- "container-fluid" div -->
+
+</body>
+</html>

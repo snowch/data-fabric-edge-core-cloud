@@ -1,0 +1,4 @@
+pipeline/util/VertxWebServer.class
+pipeline/util/StreamsHelper.class
+pipeline/util/MessageLogger.class
+pipeline/util/AppConfig.class
