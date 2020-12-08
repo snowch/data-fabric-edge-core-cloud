@@ -17,7 +17,13 @@ public class MCSRestClient {
 
     public MCSRestClient() throws Exception {
     	
-    		this.mcsHostname = AppConfig.getConfigValue("edge-MCS-hostname");
+    		// Disable SSL verification  - do not do this in production
+    		HttpsTrustManager.allowAllSSL();
+    		
+      		//this.mcsHostname = AppConfig.getConfigValue("edge-MCS-hostname");
+    		
+    		this.mcsHostname = System.getenv("EDGE_HOSTNAME");
+
     		this.mcsBaseURL = String.format("https://%s:8443/rest", this.mcsHostname);
     		
     		String mcsUserPass = AppConfig.getConfigValue("edge-MCS-userpass");
